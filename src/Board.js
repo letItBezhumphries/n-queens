@@ -62,7 +62,7 @@
     },
 
 
-/*
+    /*
          _             _     _
      ___| |_ __ _ _ __| |_  | |__   ___ _ __ ___ _
     / __| __/ _` | '__| __| | '_ \ / _ \ '__/ _ (_)
@@ -79,12 +79,39 @@
     //
     // test if a specific row on this board contains a conflict
     hasRowConflictAt: function(rowIndex) {
-      return false; // fixme
+      // //if there is a conflict it will be true
+      // //matrix = [[0,0][0,0]]
+      // //rowIndex = 0; check the first row
+      var matrix = this.rows();
+      var sumRowIndex = matrix[rowIndex].reduce(function(result, item) {
+        return result + item;
+      }, 0);
+
+      if (sumRowIndex > 1) {
+        return true;
+      }
+      return false;
     },
 
     // test if any rows on this board contain conflicts
     hasAnyRowConflicts: function() {
-      return false; // fixme
+      //build matrix
+      //for each row call the hasRowConflictsAt
+      //use hasRowConflictAt method to check each row
+      //if one is true => true
+      //_.range(n) => [0,...n-1]
+      //invoke hasRowConflictAt() for every element in the range
+      //if any one is true => true
+      //this.hasRowConflictAt(0)....this.hasRowConflictAt(n-1)
+      //this.hasRowConflictAt(0) => true | false
+      //if this.hasRowConflictAt(0) is true, then stop
+      //else keep going 0..n-1 to find the first true
+      //_.range(4) => [0, 1, 2, 3].filter(function(index) {}
+      var matrix = this.rows();
+      return _.range(matrix.length).reduce(function(result, index) {
+        return result || this.hasRowConflictAt.call(this, index);
+      }, false);
+
     },
 
 
