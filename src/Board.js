@@ -100,16 +100,10 @@
       //use hasRowConflictAt method to check each row
       //if one is true => true
       //_.range(n) => [0,...n-1]
-      //invoke hasRowConflictAt() for every element in the range
-      //if any one is true => true
-      //this.hasRowConflictAt(0)....this.hasRowConflictAt(n-1)
-      //this.hasRowConflictAt(0) => true | false
-      //if this.hasRowConflictAt(0) is true, then stop
-      //else keep going 0..n-1 to find the first true
-      //_.range(4) => [0, 1, 2, 3].filter(function(index) {}
       var matrix = this.rows();
+      var board = this;
       return _.range(matrix.length).reduce(function(result, index) {
-        return result || this.hasRowConflictAt.call(this, index);
+        return result || board.hasRowConflictAt(index);
       }, false);
 
     },
