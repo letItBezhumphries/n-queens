@@ -138,15 +138,41 @@
 
     // Major Diagonals - go from top-left to bottom-right
     // --------------------------------------------------------------
-    //
+    //0,1,2,3,-1,0,1,2,-2,-1,0,1,-3,-2,-1,0
     // test if a specific major diagonal on this board contains a conflict
     hasMajorDiagonalConflictAt: function(majorDiagonalColumnIndexAtFirstRow) {
-      return false; // fixme
+      var matrix = this.rows();
+      var input = majorDiagonalColumnIndexAtFirstRow;
+      //colIndex - rowIndex = input
+      //input = -1
+      //matrix[0]: 0 + (-1) < 0
+      //matrix[1]: 1 + (-1) = 0
+      //matrix[2]: 2 + (-1) = 1
+      //matrix[3]: 3 + (-1) = 2
+
+      var sumMajorIndex = matrix.reduce(function(result, item, index) {
+        //item = rowIndex
+        //index = colIndex
+        if (index + input >= 0 && index + input < matrix.length) {
+          return result + item[index + input];
+        }
+        return result;
+      }, 0);
+
+      if (sumMajorIndex > 1) {
+        return true;
+      }
+      return false;
+
     },
 
     // test if any major diagonals on this board contain conflicts
     hasAnyMajorDiagonalConflicts: function() {
-      return false; // fixme
+      var matrix = this.rows();
+      var board = this;
+      return _.range(2 - matrix.length, matrix.length).reduce(function(result, index) {
+        return result || board.hasMajorDiagonalConflictAt(index);
+      }, false);
     },
 
 
@@ -156,12 +182,37 @@
     //
     // test if a specific minor diagonal on this board contains a conflict
     hasMinorDiagonalConflictAt: function(minorDiagonalColumnIndexAtFirstRow) {
-      return false; // fixme
+      var matrix = this.rows();
+      var input = minorDiagonalColumnIndexAtFirstRow;
+      //colIndex + rowIndex = input
+      //n = 4
+      //input = 4
+      //matrix[0]: 4 - 0 = 4 (0, 4) not inbound
+      //matrix[1]: 4 - 1 = 3 (1, 3)
+      //matrix[2]: 4 - 2 = 2 (2, 2)
+      //matrix[3]: 4 - 3 = 1 (3, 1)
+      //item = rowIndex
+      //index = colIndex
+      var sumMinorIndex = matrix.reduce(function(result, item, index) {
+        if (input - index >= 0 && input - index < matrix.length) {
+          return result + item[input - index];
+        }
+        return result;
+      }, 0);
+
+      if (sumMinorIndex > 1) {
+        return true;
+      }
+      return false;
     },
 
     // test if any minor diagonals on this board contain conflicts
     hasAnyMinorDiagonalConflicts: function() {
-      return false; // fixme
+      var matrix = this.rows();
+      var board = this;
+      return _.range(matrix.length * 2 - 2).reduce(function(result, index) {
+        return result || board.hasMinorDiagonalConflictAt(index);
+      }, false);
     }
 
     /*--------------------  End of Helper Functions  ---------------------*/
