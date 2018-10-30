@@ -13,18 +13,60 @@
 
 // return a matrix (an array of arrays) representing a single nxn chessboard, with n rooks placed such that none of them can attack each other
 
-
-
 window.findNRooksSolution = function(n) {
-  var solution = undefined; //fixme
+  var start = new Date();
+  var board = new Board({'n': n});
+  var solution = board.rows();
+  //start board.togglePiece(0, 0)
+  //go to row 1, togglePiece a position that has no ColConflict
+  //base: row === n, return solution
+  //recursive: for loop of all index of a row, togglePiece(row, index),
+  //if no ColConflict, recurse(row+1)
+  //if is ColConflict, togglePiece again
 
-  console.log('Single solution for ' + n + ' rooks:', JSON.stringify(solution));
+  var search = function(rowIndex) {
+    if (rowIndex === n) {
+      return solution;
+    }
+    for (var i = 0; i < n; i++) {
+      board.togglePiece(rowIndex, i);
+      if (!board.hasColConflictAt(i)) {
+        search(rowIndex + 1);
+      } else {
+        board.togglePiece(rowIndex, i);
+      }
+    }
+  };
+
+  search(0);
+  var end = new Date();
+  console.log('Runtime: ' + (end - start) + ' milliseconds. Single solution for ' + n + ' rooks:', JSON.stringify(solution));
   return solution;
 };
 
 // return the number of nxn chessboards that exist, with n rooks placed such that none of them can attack each other
 window.countNRooksSolutions = function(n) {
-  var solutionCount = undefined; //fixme
+  var board = new Board({'n': n});
+  var solutionCount = 0;
+  //toggle(0, 0) i = 0; row === n, count++
+  //i = 0....n-1
+  //(0, 0) => 1 solution
+  //(0, 1)
+  var count = function(rowIndex) {
+    if (rowIndex === n) {
+      solutionCount++;
+    } else {
+      for (var i = 0; i < n; i++) {
+        board.togglePiece(rowIndex, i); //toggle(0,0)
+        if (!board.hasColConflictAt(i)) {
+          count(rowIndex + 1); //count(1), toggle(1,0), conflict, untoggle(1,0), toggle(1, 1), no conflinct, count(2)
+        }
+        board.togglePiece(rowIndex, i);//untoggle(0,0)
+      }
+    }
+  };
+
+  count(0);
 
   console.log('Number of solutions for ' + n + ' rooks:', solutionCount);
   return solutionCount;
