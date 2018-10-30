@@ -109,18 +109,29 @@
     },
 
 
-
     // COLUMNS - run from top to bottom
     // --------------------------------------------------------------
     //
     // test if a specific column on this board contains a conflict
     hasColConflictAt: function(colIndex) {
-      return false; // fixme
+      var matrix = this.rows();
+      //reduce the matrix to get sum of rows at colIndex
+      var sumColIndex = matrix.reduce(function(result, index) {
+        return result + index[colIndex];
+      }, 0);
+      if (sumColIndex > 1) {
+        return true;
+      }
+      return false;
     },
 
     // test if any columns on this board contain conflicts
     hasAnyColConflicts: function() {
-      return false; // fixme
+      var matrix = this.rows();
+      var board = this;
+      return _.range(matrix.length).reduce(function(result, index) {
+        return result || board.hasColConflictAt(index);
+      }, false);
     },
 
 
