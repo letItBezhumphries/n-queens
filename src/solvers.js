@@ -57,9 +57,9 @@ window.countNRooksSolutions = function(n) {
       solutionCount++;
     } else {
       for (var i = 0; i < n; i++) {
-        board.togglePiece(rowIndex, i); //toggle(0,0)
+        board.togglePiece(rowIndex, i); //toggle(0,0)//toggle(1,0), untoggle(1,0)//toggle(1, 1)
         if (!board.hasColConflictAt(i)) {
-          count(rowIndex + 1); //count(1), toggle(1,0), conflict, untoggle(1,0), toggle(1, 1), no conflinct, count(2)
+          count(rowIndex + 1); //count(1)//count(2)//count(3)//untoggle count 3 pc//untoggle count 2 pc
         }
         board.togglePiece(rowIndex, i);//untoggle(0,0)
       }
